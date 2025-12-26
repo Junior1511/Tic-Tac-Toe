@@ -5,9 +5,10 @@ class Game
 
   def initialize
     @board = Board.new()
-    # @p1 = nil
-    # @p2 = nil
-    # set_players
+    @p1 = nil
+    @p2 = nil
+    @done = false
+    set_players
     taking_turns
   end
 
@@ -18,7 +19,6 @@ class Game
     p1_m = gets.chomp
     @p1 = Player.new(p1_n,p1_m)
     @board.board1_name(@p1.name)
-    @board.print_board
     
     puts "Hello player 2, what is your name?"
     p2_n = gets.chomp
@@ -41,14 +41,17 @@ class Game
     ]
     winning_combos.each do |combos|
       if @board.get_positions[combos[0]] == @p1.mark && @board.get_positions[combos[1]] == @p1.mark && @board.get_positions[combos[2]] == @p1.mark
+        @done = true
         puts "#{@p1.name} is the Winner!"
       elsif @board.get_positions[combos[0]] == @p2.mark && @board.get_positions[combos[1]] == @p2.mark && @board.get_positions[combos[2]] == @p2.mark
+        @done = true
         puts "#{@p2.name} is the Winner!"
       end
     end
 
     if @board.get_positions.all?{|num| num.is_a?(String)}
       puts "its a draw!"
+      @done = true
     end
     
     false
@@ -56,10 +59,29 @@ class Game
   end
   
   def taking_turns
-    
+    until @done == true
+      puts "#{@p1.name} pick a place on the board" #player one's turn
+      @board.update_board(gets.chomp.to_i, @p1.mark)
+      @board.print_board
+      self.who_wins
+      break if @done == true
+      puts "#{@p2.name} pick a place on the board" #player two's turn
+      @board.update_board(gets.chomp.to_i, @p2.mark) 
+      @board.print_board
+      self.who_wins
+    end
   end
+
+  def repeat_n_reset
+    #loop of taking turns but ones @done is done it stops and the game ends
+    #but idk maybe i can just do that in the taking turns itself idk
+    #or maybe i can make the program close itself and then execute itself idk
+    #that would be pretty cool though
+    #after thinking about it, yes it can not be in the taking turns method because
+    #if its in there it will execute every time
+  end
+
 end
 
 dude = Game.new()
-dude.who_wins
 
