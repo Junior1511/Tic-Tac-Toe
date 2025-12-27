@@ -1,5 +1,4 @@
 require 'io/console'
-# require_relative 'player'
 
 class Board
   def initialize
@@ -9,7 +8,7 @@ class Board
   end
 
   def print_board
-    # create center and pint board
+    # create, center, and pint board
     width = IO.console.winsize[1]
     board = [
       "     ",
@@ -26,16 +25,18 @@ class Board
   end
 
   def update_board(position, mark)
-    #change board positions and then print the board aka call print 
+    #change board positions
     if position >= 0 && position <= 8
       unless @positions[position] == "x" || @positions[position] == "o"
         @positions[position] = mark
-        self.print_board
+        return false
       else
         puts "That position is already occupied"
+        return true
       end
     else 
       puts "This input is not a number between 0 and 8"
+      return true
     end
   end
 
