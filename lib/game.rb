@@ -5,7 +5,7 @@ class Game
 
   def initialize
     @board = Board.new()
-    @players = Player.new
+    @players = Player.new()
     @done = false
   end
   
@@ -39,7 +39,6 @@ class Game
       puts "#{@players.p1_name} pick a place on the board" #player one's turn
       until @board.update_board(gets.chomp.to_i, @players.p1_mark) == false
         puts "#{@players.p1_name} pick a different place on the board"
-        @board.update_board(gets.chomp.to_i, @players.p1_mark)
       end
       @board.print_board
       self.who_wins
@@ -47,7 +46,6 @@ class Game
       puts "#{@players.p2_name} pick a place on the board" #player two's turn
       until @board.update_board(gets.chomp.to_i, @players.p2_mark)  == false
         puts "#{@players.p2_name} pick a different place on the board"
-        @board.update_board(gets.chomp.to_i, @players.p2_mark)
       end
       @board.print_board
       self.who_wins
@@ -56,19 +54,18 @@ class Game
 
   
   def repeat_n_reset
-    answer = nil
-    until answer.downcase == "y" || answer.downcase == "n"
-      puts "Do you wanna play again?"
-      puts "Type Y or N to continue"
-      answer = gets.chomp
-      if answer.downcase == "y"
-        @board.board_reset
-        self.play_wo_reset
-      elsif answer.downcase == "n"
-        puts "The Game is gone. G_Gs"
-      else 
-        puts "You did not type Y or N"
-      end
+    puts "Do you wanna play again?"
+    puts "Type Y or N to continue"
+    answer = gets.chomp
+    if answer.downcase == "y"
+      @board.board_reset
+      @done = false
+      self.play
+    elsif answer.downcase == "n"
+      puts "The Game is gone. G_Gs"
+    else 
+      puts "You did not type Y or N"
+      self.repeat_n_reset
     end
   end
   
@@ -81,7 +78,3 @@ class Game
   end
 
 end
-
-dude = Game.new()
-dude.play
-
